@@ -54,7 +54,7 @@ async function logout() {
   try {
     await authStore.logout()
     router.replace({ name: 'home' })
-  } catch (err) {
+  } catch (err:any) {
     console.log(err.message)
   }
 }

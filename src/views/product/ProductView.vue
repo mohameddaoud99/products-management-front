@@ -56,20 +56,29 @@ import { useProductStore } from "../../stores/product";
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+  // Add other properties as needed
+}
+
 const productStore = useProductStore();
-const data = ref([]);
+const data = ref<Product[]>([]);
 
 async function getProducts() {
   data.value = await productStore.getProducts();
 }
 
-async function deleteProduct(productId) {
+async function deleteProduct(productId: any) {
   try {
     const shouldDelete = await confirmDelete();
-    
+
     if (shouldDelete) {
       const result = await productStore.deleteProduct(productId);
-      
+
       if (result) {
         console.log('Product deleted successfully');
         Swal.fire({
@@ -78,7 +87,7 @@ async function deleteProduct(productId) {
           text: 'Your product has been deleted successfully.',
           confirmButtonText: 'OK',
         });
-        
+
         // Refresh the product list after deletion
         data.value = await productStore.getProducts();
       }
@@ -106,6 +115,8 @@ onMounted(async () => {
   await getProducts();
 });
 </script>
+
+
 <style scoped>
   /* Add margin to the right of the RouterLink */
   .mr-2 {
